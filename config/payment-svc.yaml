@@ -1,0 +1,8 @@
+# payment-svc runtime configuration
+service: payment-svc
+port: 18102
+log_level: INFO
+db:
+  path: payments.db          # overridden by PAYMENT_DB_PATH in deployed environments
+  pool_size: 4
+  acquire_timeout_ms: 3000

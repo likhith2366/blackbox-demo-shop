@@ -1,0 +1,7 @@
+# checkout-svc runtime configuration
+service: checkout-svc
+port: 18101
+log_level: INFO
+payment:
+  base_url: http://127.0.0.1:18102
+  # timeout / retry policy: defaults from libs/httpclient/policy.py unless set here
