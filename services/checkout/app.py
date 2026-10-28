@@ -60,6 +60,9 @@ class Handler(JsonHandler):
         sp.set("order.id", order["order_id"])
         fields = dict(order_id=order["order_id"], customer_id=order["customer_id"],
                       amount=order["amount"], item=order["item"])
+        note = str(order.get("note") or "")[:MAX_NOTE_CHARS]
+        if note:
+            fields["note"] = note
         LOG.info("order received", **fields)
         charge = {"order_id": order["order_id"], "customer_id": order["customer_id"],
                   "amount": order["amount"], "currency": order.get("currency", "USD")}
