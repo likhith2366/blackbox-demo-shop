@@ -85,6 +85,12 @@ class Handler(JsonHandler):
 
         try:
             now = datetime.now(timezone.utc)
+            existing = db.existing_payment(conn, order_id)
+            if existing:
+                POOL.release(conn)
+                LOG.info("charge already recorded", order_id=order_id, payment_id=existing)
+                self.send_json(200, {"payment_id": existing, "status": "approved"})
+                return 200
             with TRACER.span("risk.score", attributes={"amount": amount}):
                 time.sleep(risk_provider_delay_s(order_id, amount))
             q0 = time.time()
