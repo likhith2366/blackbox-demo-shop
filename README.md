@@ -14,3 +14,14 @@ Services for the demo shop.
 
 Releases are built by the build pipeline into immutable artifacts; see BUILD_INFO.json
 inside an artifact for its build id, commit and digest.
+
+## Running locally
+
+Start payment-svc first, then checkout-svc, from the repo root:
+
+```
+python -m services.payment.app
+python -m services.checkout.app
+```
+
+Ports come from `config/`: checkout-svc 18101, payment-svc 18102. Both expose `GET /health`.
