@@ -12,3 +12,7 @@
 ## 2026-09
 - DEMO-3: customer/time index for payment velocity checks
 - initial import of checkout-svc and payment-svc
+
+## Unreleased
+- runbooks for checkout-svc and payment-svc, on-call and architecture docs
+- CI workflow, policy tests, ruff config, smoke check script
