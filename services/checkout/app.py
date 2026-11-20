@@ -95,7 +95,8 @@ class Handler(JsonHandler):
             self.send_json(402, {"error": "payment declined"})
             return 402
         LOG.info("order completed", order_id=order["order_id"],
-                 payment_id=result.get("payment_id"), attempts=resp.attempts)
+                 payment_id=result.get("payment_id"), attempts=resp.attempts,
+                 item=order["item"])
         self.send_json(201, {"order_id": order["order_id"], "payment_id": result.get("payment_id")})
         return 201
 
