@@ -108,7 +108,7 @@ class Handler(JsonHandler):
             return 500
         POOL.release(conn)
         LOG.info("charge approved", order_id=order_id, payment_id=payment_id,
-                 recent_duplicate=dup, orders_30d=count_30d)
+                 recent_duplicate=dup, orders_30d=count_30d, currency=currency)
         self.send_json(201, {"payment_id": payment_id, "status": "approved"})
         return 201
 
