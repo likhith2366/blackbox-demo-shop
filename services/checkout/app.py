@@ -57,6 +57,10 @@ class Handler(JsonHandler):
             LOG.warning("rejected order: invalid payload")
             self.send_json(400, {"error": "invalid order"})
             return 400
+        if int(order["qty"]) > 10:
+            LOG.warning("rejected order: quantity above limit", order_id=order["order_id"])
+            self.send_json(400, {"error": "quantity above limit"})
+            return 400
         sp.set("order.id", order["order_id"])
         fields = dict(order_id=order["order_id"], customer_id=order["customer_id"],
                       amount=order["amount"], item=order["item"])
