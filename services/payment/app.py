@@ -14,6 +14,7 @@ from services.payment import db
 NAME = "payment-svc"
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LARGE_AMOUNT = 300.0
+SMALL_CHARGE_LIMIT = 5.0
 
 
 def _iso(dt: datetime) -> str:
@@ -91,6 +92,12 @@ class Handler(JsonHandler):
                 LOG.info("charge already recorded", order_id=order_id, payment_id=existing)
                 self.send_json(200, {"payment_id": existing, "status": "approved"})
                 return 200
+            if amount < SMALL_CHARGE_LIMIT:
+                # Micro-charges skip risk scoring and velocity checks (DEMO-41).
+                payment_id = db.insert_payment(conn, order_id, customer_id, amount, currency, _iso(now))
+                LOG.info("charge approved", order_id=order_id, payment_id=payment_id, fast_path=True)
+                self.send_json(201, {"payment_id": payment_id, "status": "approved"})
+                return 201
             with TRACER.span("risk.score", attributes={"amount": amount}):
                 time.sleep(risk_provider_delay_s(order_id, amount))
             q0 = time.time()
